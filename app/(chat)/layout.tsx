@@ -1,43 +1,64 @@
-import { ReactNode } from 'react';
-import Sidebar from './Sidebar'; // Example: Sidebar component
-import Header from './Header';   // Example: Header component
-import Footer from './Footer';   // Example: Footer component
-import { useSession } from 'next-auth/react';
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 
+import '@/app/globals.css'
+import { cn } from '@/lib/utils'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
+import { Providers } from '@/components/providers'
+import { Header } from '@/components/header'
+import { Toaster } from '@/components/ui/sonner'
 
-interface LayoutProps {
-  children: ReactNode;
+export const metadata = {
+  metadataBase: process.env.VERCEL_URL
+    ? new URL(`https://${process.env.VERCEL_URL}`)
+    : undefined,
+  title: {
+    default: 'Echo AI Chatbot',
+    template: `%s - Echo ai AI Chatbot`
+  },
+  description: 'An AI-powered chatbot.',
+  icons: {
+    icon: '/echo-logo.png',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png'
+  }
 }
 
+export const viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' }
+  ]
+}
 
-const Layout = ({ children }: LayoutProps) => {
-  const { data: session } = useSession();
+interface RootLayoutProps {
+  children: React.ReactNode
+}
 
-
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <Header session={session} />
-
-
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <Sidebar />
-
-
-        {/* Main Content */}
-        <main className="flex-grow p-6">
-          {children}
-        </main>
-      </div>
-
-
-      {/* Footer */}
-      <Footer />
-    </div>
-  );
-};
-
-
-export default Layout;
-```
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          'font-sans antialiased',
+          GeistSans.variable,
+          GeistMono.variable
+        )}
+      >
+        <Toaster position="top-center" />
+        <Providers
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
+          </div>
+          <TailwindIndicator />
+        </Providers>
+      </body>
+    </html>
+  )
+}

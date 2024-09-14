@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Global reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif; /* Example font */
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+
+/* Custom classes */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+button {
+  cursor: pointer;
+}
+
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+```
+
+
+- **Features**:
+  - Uses Tailwind’s base, components, and utilities.
+  - Resets margin and padding for `html` and `body`, and sets a default font family.
+  - Customizes global elements like links (`a`), buttons, and scrollbars.
+  - Minimal global CSS to leverage Tailwind utilities for most of the styling.
+  
+### 3. **`actions.ts`**
+
+
+This file handles server-side or client-side actions such as API calls, form handling, or any business logic. Let's define a sample function that interacts with your API (e.g., for user login or registration).
+
+
+```ts
+// actions.ts
+import axios from 'axios';
+
+
+// Example: Login action
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const response = await axios.post('/api/auth/login', { email, password });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error('Login failed. Please check your credentials.');
+  }
+};
+
+
+// Example: Register action
+export const registerUser = async (name: string, email: string, password: string) => {
+  try {
+    const response = await axios.post('/api/auth/register', { name, email, password });
+    if (response.status === 201) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error('Registration failed. Please try again.');
+  }
+};
+
+
+// Example: Fetch user profile
+export const fetchUserProfile = async (userId: string) => {
+  try {
+    const response = await axios.get(`/api/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching user profile.');
+  }
+};
